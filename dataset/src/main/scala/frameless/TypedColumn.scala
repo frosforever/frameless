@@ -66,6 +66,14 @@ abstract class AbstractTypedColumn[T, U]
     extends UntypedExpression[T] { self =>
 
   type ThisType[A, B] <: AbstractTypedColumn[A, B]
+  trait Mapper[X] {
+    def map[G](u: TypedColumn[T, X] => TypedColumn[T, G]): TypedColumn[T, Option[G]] =
+      u(self.asInstanceOf[TypedColumn[T, X]]).asInstanceOf[TypedColumn[T, Option[G]]]
+  }
+
+  def opt[X](implicit x: U <:< Option[X]): Mapper[X] = new Mapper[X] {}
+
+
 
   /** Fall back to an untyped Column */
   def untyped: Column = new Column(expr)
