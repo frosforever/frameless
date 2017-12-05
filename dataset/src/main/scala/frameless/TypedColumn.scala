@@ -33,6 +33,14 @@ sealed class TypedColumn[T, U](
   val uencoder: TypedEncoder[U]
 ) extends UntypedExpression[T] { self =>
 
+  trait Mapper[X] {
+    def map[G](u: TypedColumn[T, X] => TypedColumn[T, G]): TypedColumn[T, Option[G]] =
+      u(self.asInstanceOf[TypedColumn[T, X]]).asInstanceOf[TypedColumn[T, Option[G]]]
+  }
+
+  def opt[X](implicit x: U <:< Option[X]): Mapper[X] = new Mapper[X] {}
+
+
   /** From an untyped Column to a [[TypedColumn]]
     *
     * @param column a spark.sql Column
