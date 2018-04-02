@@ -35,4 +35,6 @@ object CatalystOrdered {
       i0: Generic.Aux[G, H],
       i1: Lazy[LiftAll[CatalystOrdered, H]]
     ): CatalystOrdered[G] = of[G]
+
+  implicit def optionEv[A](implicit catalystOrdered: CatalystOrdered[A]): CatalystOrdered[Option[A]] = of[Option[A]]
 }
