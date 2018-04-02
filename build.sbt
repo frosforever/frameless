@@ -23,10 +23,6 @@ lazy val cats = project
   .settings(framelessSettings: _*)
   .settings(warnUnusedImport: _*)
   .settings(publishSettings: _*)
-  .settings(
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
-    scalacOptions += "-Ypartial-unification"
-  )
   .settings(libraryDependencies ++= Seq(
     "org.typelevel"    %% "cats-core"      % catsCoreVersion,
     "org.typelevel"    %% "cats-effect"    % catsEffectVersion,
@@ -74,10 +70,6 @@ lazy val docs = project
     "org.apache.spark" %% "spark-sql"  % sparkVersion,
     "org.apache.spark" %% "spark-mllib"  % sparkVersion
   ))
-  .settings(
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
-    scalacOptions += "-Ypartial-unification"
-  )
   .dependsOn(dataset, cats, ml)
 
 lazy val framelessSettings = Seq(
@@ -92,7 +84,8 @@ lazy val framelessSettings = Seq(
     "org.scalacheck" %% "scalacheck" % scalacheck % "test"),
   javaOptions in Test ++= Seq("-Xmx1G"),
   fork in Test := true,
-  parallelExecution in Test := false
+  parallelExecution in Test := false,
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
 )
 
 lazy val commonScalacOptions = Seq(
@@ -108,6 +101,7 @@ lazy val commonScalacOptions = Seq(
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-language:existentials",
+  "-Ypartial-unification",
   "-language:experimental.macros",
   "-language:implicitConversions",
   "-language:higherKinds",
