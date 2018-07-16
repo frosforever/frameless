@@ -66,7 +66,7 @@ lazy val ml = project
 lazy val docs = project
   .settings(framelessSettings: _*)
   .settings(noPublishSettings: _*)
-  .settings(tutSettings: _*)
+  .enablePlugins(TutPlugin)
   .settings(crossTarget := file(".") / "docs" / "target")
   .settings(libraryDependencies ++= Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion,
@@ -206,8 +206,8 @@ lazy val publishSettings = Seq(
 )
 
 lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
+  publish := (()),
+  publishLocal := (()),
   publishArtifact := false
 )
 
@@ -224,5 +224,5 @@ lazy val copyReadme = taskKey[Unit]("copy for website generation")
 lazy val copyReadmeImpl = Def.task {
   val from = baseDirectory.value / "README.md"
   val to   = baseDirectory.value / "docs" / "src" / "main" / "tut" / "README.md"
-  sbt.IO.copy(List((from, to)), overwrite = true, preserveLastModified = true)
+  sbt.IO.copy(List((from, to)), overwrite = true, preserveLastModified = true, preserveExecutable = true)
 }
